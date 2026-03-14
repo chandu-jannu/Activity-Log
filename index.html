@@ -1,0 +1,554 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4ade80">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ActivityLog">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="header">
+        <div class="header-left">
+            <button class="theme-toggle-btn" id="themeToggle">🌙</button>
+            <h1> <span style="background: linear-gradient(135deg, #4ade80, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;">Activity</span> <span style="color: #64748b; font-weight: 400; font-size: 22px;">Log</span></h1>
+        </div>
+       
+
+        <div class="page-nav">
+            <button class="page-pill active" onclick="showPage(1)" id="pill1">📋 Planner</button>
+            <button class="page-pill" onclick="showPage(2)" id="pill2">💪 Health</button>
+        </div>
+        
+        <div class="timer-compact">
+            <div class="timer-display-row">
+                <div class="timer-display-small" id="timerDisplay">10:00</div>
+                <button class="timer-edit-btn" id="editBtn">✏️</button>
+            </div>
+            <div class="timer-buttons-small">
+                <button class="timer-btn-small" id="startBtn">Start</button>
+                <button class="timer-btn-small secondary" id="resetBtn">Reset</button>
+            </div>
+        </div>
+
+        <div class="date-time">
+            <div class="date-display">
+                <div class="date-box" id="monthBox">12</div>
+                <div class="date-box" id="dayBox">06</div>
+            </div>
+            <div class="live-time">
+                <div class="live-time-label">Today</div>
+                <div class="live-time-value" id="liveTime">00:00</div>
+            </div>
+            <button onclick="openNotifSettings()" class="settings-btn" style="margin-left:8px;">⚙️</button>
+        </div>
+        
+    </div>
+
+    <!-- PAGE 1: PLANNER -->
+    <div class="pages-container active" id="page1">
+    <div class="container">
+        <div class="sidebar">
+            <div class="section-header">
+                <div class="section-title">✔ To Do</div>
+                <div class="category-toggle" id="categoryToggle"></div>
+            </div>
+
+            <div class="task-input-group">
+                <input type="text" id="taskInput" placeholder="Add new task...">
+                <button id="addTaskBtn">+</button>
+            </div>
+
+            <div class="task-list" id="taskList"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="widget weather-widget">
+                <div class="weather-location" id="weatherLocation">Loading...</div>
+                <div class="weather-temp" id="weatherTemp">--°F</div>
+                <div class="weather-desc" id="weatherDesc">--</div>
+                <div class="weather-details">
+                    <div class="weather-detail-item">
+                        <span class="weather-detail-label">Visibility</span>
+                        <span class="weather-detail-value" id="weatherVisibility">10 km</span>
+                    </div>
+                    <div class="weather-detail-item">
+                        <span class="weather-detail-label">Wind Speed</span>
+                        <span class="weather-detail-value" id="weatherWind">-- mph</span>
+                    </div>
+                    <div class="weather-detail-item">
+                        <span class="weather-detail-label">Feels Like</span>
+                        <span class="weather-detail-value" id="weatherFeels">--°F</span>
+                    </div>
+                    <div class="weather-detail-item">
+                        <span class="weather-detail-label">Pressure</span>
+                        <span class="weather-detail-value" id="weatherPressure">1013 mb</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div style="margin-bottom: 20px; font-size: 16px; color: var(--text-secondary); font-weight: 600;">🗓️ This Week</div>
+                <div class="weekly-schedule" id="weeklySchedule"></div>
+            </div>
+
+            <div class="history-section">
+                <div class="history-header">📈 Daily Completion History</div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">No completion history yet</div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="sidebar">
+            <div class="analytics-section">
+                <div class="analytics-header">📊 Task Analytics</div>
+                <div class="analytics-content">
+                    <div class="pie-chart-container">
+                        <div class="pie-chart" id="pieChart">
+                            <div class="pie-chart-center">
+                                <div class="pie-percentage" id="piePercentage">0%</div>
+                                <div class="pie-label">Completed</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="completedCount">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card pending">
+                            <div class="stat-value" id="pendingCount">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalCount">0</div>
+                            <div class="stat-label">Total Tasks</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="categoryCount">0</div>
+                            <div class="stat-label" id="categoryLabel">Daily</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-header">
+                <div class="calendar-month" id="calendarMonth"></div>
+                <div class="calendar-nav">
+                    <button id="prevMonth">←</button>
+                    <button id="nextMonth">→</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendar"></div>
+
+            <div class="assignments-section">
+                <div class="assignments-header">
+                    <span>📋 Assignments</span>
+                    <button class="add-assignment-btn" id="addAssignmentBtn">+ Add</button>
+                </div>
+                <div class="assignment-form" id="assignmentForm">
+                    <input type="text" id="assignmentNameInput" placeholder="Assignment name...">
+                    <input type="date" id="assignmentDateInput">
+                    <div class="assignment-form-buttons">
+                        <button class="save-btn" id="saveAssignmentBtn">Save</button>
+                        <button class="cancel-btn" id="cancelAssignmentBtn">Cancel</button>
+                    </div>
+                </div>
+                <div id="assignmentsList"></div>
+            </div>
+            
+            <button class="reset-btn" id="resetAllBtn" title="Reset All Data">🗑️</button>
+        </div>
+    </div>
+    </div><!-- END PAGE 1 -->
+
+    <!-- PAGE 2: HEALTH -->
+    <div class="pages-container" id="page2">
+        <div class="health-grid">
+            <!-- Summary Card -->
+            <div class="health-card">
+                <div class="health-card-title">🔥 HEALTH SUMMARY</div>
+                <div class="streak-box">
+                    <div>
+                        <div class="streak-number" id="streakDisplay">1</div>
+                        <div class="streak-label">Day Streak</div>
+                        <div class="streak-best">Best: 1 days</div>
+                    </div>
+                </div>
+                <div class="stat-boxes">
+                    <div class="stat-box">
+                        <div class="stat-value" id="waterSummary">0/8</div>
+                        <div class="stat-label">💧 Water</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="suppSummary">0/5</div>
+                        <div class="stat-label">💊 Supps</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="routineSummary">0%</div>
+                        <div class="stat-label">✅ Routine</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="streakSummary">1</div>
+                        <div class="stat-label">🔥 Streak</div>
+                    </div>
+                </div>
+
+                <!-- MOOD LOGGER -->
+                <div class="mood-section">
+                    <div class="mood-title">😊 How are you feeling today?</div>
+                    <div class="mood-grid" id="moodGrid">
+                        <button class="mood-btn" data-mood="😄" data-label="Amazing" onclick="setMood('😄','Amazing')">😄<span>Amazing</span></button>
+                        <button class="mood-btn" data-mood="😊" data-label="Good" onclick="setMood('😊','Good')">😊<span>Good</span></button>
+                        <button class="mood-btn" data-mood="😐" data-label="Okay" onclick="setMood('😐','Okay')">😐<span>Okay</span></button>
+                        <button class="mood-btn" data-mood="😔" data-label="Low" onclick="setMood('😔','Low')">😔<span>Low</span></button>
+                        <button class="mood-btn" data-mood="😤" data-label="Stressed" onclick="setMood('😤','Stressed')">😤<span>Stressed</span>              </button>
+                        <button class="mood-btn" data-mood="😴" data-label="Tired" onclick="setMood('😴','Tired')">😴<span>Tired</span></button>
+                    </div>
+                    <div class="mood-saved" id="moodSaved"></div>
+                </div>
+
+                <div class="tip-box">
+                    <div class="tip-title">💡 Break The Barrier</div>
+                    <div class="tip-text">The hardest part is starting. Once you start, momentum takes over. Just one task. One sip of water. One minute of movement. Break the initial resistance. 🚀</div>
+                </div>
+            </div>
+
+            <!-- Water Card -->
+            <div class="health-card">
+                <div class="health-card-title">💧 HYDRATION & NUTRITION</div>
+                <div style="margin-bottom: 16px;">
+                    <div class="water-label">
+                        <div class="water-title">💧 Water Intake</div>
+                        <div class="water-count"><span id="waterCount">0</span>/8</div>
+                    </div>
+                    <div class="water-dots" id="waterDots"></div>
+                    <div class="water-buttons">
+                        <button class="water-btn" onclick="addWater()">+ Glass</button>
+                        <button class="water-btn" onclick="removeWater()">− Remove</button>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                        <div class="health-card-title" style="margin: 0;">💊 MANAGE SUPPLEMENTS</div>
+                        <button class="supp-edit-btn" onclick="openSuppManager()" title="Add Supplement">✏️</button>
+                    </div>
+                    <!-- Supplement Manager Card (Your Design) -->
+                    <div class="supp-manager-card">
+                        <div class="supp-card-content" id="suppCardContent"></div>
+                    </div>
+                </div>
+                </div>
+            
+
+            <!-- Routine Card -->
+            <div class="health-card">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+  
+                <div class="health-card-title">✅ DAILY ROUTINE</div>
+                <button class="routine-edit-btn" onclick="openroutine()" title="Add routine">✏️</button>
+                </div>
+            
+                <div class="routine-header">
+                    <div class="routine-title">Today's Checklist</div>
+                    <div class="routine-percent"><span id="routinePercent">0</span>%</div>
+                </div>
+                <div class="routine-sections" id="routineSections"></div>
+             </div>
+          
+
+            <!-- Journal Card -->
+            <div class="health-card">
+                <div class="health-card-title">📝 DAILY JOURNAL</div>
+                <div class="journal-label">How was today?</div>
+                <textarea class="journal-textarea" id="journalText" placeholder="What did you learn today? Any wins? How do you feel? 🌱&#10;&#10;Even 3 lines is enough..."></textarea>
+                <div class="journal-footer">
+                    <button class="journal-save-btn" onclick="saveJournal()">Save Journal</button>
+                    <div class="journal-saved" id="journalSaved">✅ Saved!</div>
+                </div>
+                <div class="reminder-section">
+                    <div class="reminder-title">💡 Daily Reminder</div>
+                    <div class="reminder-item">
+                        <span class="reminder-emoji">🌅</span>
+                        <span class="reminder-text"><b>Morning</b> — Water → Breakfast → Supplements → Walk</span>
+                    </div>
+                    <div class="reminder-item">
+                        <span class="reminder-emoji">📚</span>
+                        <span class="reminder-text"><b>Study</b> — Green tea → Pomodoro → 20-20-20 rule</span>
+                    </div>
+                    <div class="reminder-item">
+                        <span class="reminder-emoji">🌞</span>
+                        <span class="reminder-text"><b>Afternoon</b> — Healthy lunch → 30 min walk</span>
+                    </div>
+                    <div class="reminder-item">
+                        <span class="reminder-emoji">🌙</span>
+                        <span class="reminder-text"><b>Evening</b> — Light dinner → Magnesium → Journal → Sleep</span>
+                    </div>
+                    <div class="reminder-item" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-color); color: var(--accent-primary);">
+                        <span class="reminder-emoji">💧</span>
+                        <span class="reminder-text"><b>Goal:</b> 2–3L water · 😴 7–9hrs sleep · 🏃 30 min movement</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meditation Timer Card (spans full width on row 2) -->
+            <div class="health-card meditation-card" style="grid-column: 1 / -1;">
+                <div class="health-card-title">🧘 MEDITATION TIMER</div>
+                <div class="med-body">
+                    <!-- Presets -->
+                    <div class="med-presets">
+                        <button class="med-preset active" onclick="setMedPreset(5, this)">5 min</button>
+                        <button class="med-preset" onclick="setMedPreset(10, this)">10 min</button>
+                        <button class="med-preset" onclick="setMedPreset(15, this)">15 min</button>
+                        <button class="med-preset" onclick="setMedPreset(20, this)">20 min</button>
+                        <button class="med-preset" onclick="setMedPreset(30, this)">30 min</button>
+                    </div>
+                    <!-- Ring Timer -->
+                    <div class="med-ring-wrap">
+                        <svg class="med-ring" viewBox="0 0 120 120">
+                            <circle class="med-ring-bg" cx="60" cy="60" r="52"/>
+                            <circle class="med-ring-progress" id="medRingProgress" cx="60" cy="60" r="52"
+                                stroke-dasharray="326.7"
+                                stroke-dashoffset="0"
+                                transform="rotate(-90 60 60)"/>
+                        </svg>
+                        <div class="med-ring-inner">
+                            <div class="med-time" id="medTimeDisplay">05:00</div>
+                            <div class="med-status" id="medStatus">Ready</div>
+                        </div>
+                    </div>
+                    <!-- Controls -->
+                    <div class="med-controls">
+                        <button class="med-btn start" id="medStartBtn" onclick="toggleMeditation()">▶ Start</button>
+                        <button class="med-btn reset" onclick="resetMeditation()">↺ Reset</button>
+                    </div>
+                    <!-- Sessions Today -->
+                    <div class="med-sessions">
+                        <div class="med-sessions-label">🧘 Sessions today: <span id="medSessionCount">0</span></div>
+                        <div class="med-sessions-label">⏱ Total today: <span id="medTotalTime">0 min</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- END PAGE 2 -->
+
+
+
+    <!-- SUPPLEMENT MANAGER MODAL -->
+    <div class="supp-modal-overlay" id="suppModal">
+        <div class="supp-modal-large">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 12px; border-bottom: 1px 
+           solid var(--border- color);">
+    <span style="font-size: 18px; font-weight: 700; color: var(--text-primary);">💊 Manage Supplements</span>
+    <button onclick="closeSuppManager()" class="supp-header-close-btn">✕</button>
+    
+</div>                    
+         <!-- Supplements by Time Category -->
+            <div class="supp-categories-container" id="suppCategoriesContainer"></div>
+            
+            <!-- Add New Supplement Section -->
+            <div class="supp-modal-add-section">
+                <div class="supp-add-header">➕ Add New Supplement</div>
+                
+                <div class="supp-add-input-row">
+                    <input type="text" id="suppNameInput" class="supp-name-input" placeholder="Supplement name..." maxlength="30">
+                    <button class="supp-emoji-pick" id="suppEmojiBtn" onclick="cycleSuppEmoji()">😊</button>
+                </div>
+                
+                <div class="supp-time-selector">
+                    <div class="supp-time-label" style="color: white;">Which time?</div>
+                    <div class="supp-time-buttons">
+                        <button class="supp-time-btn" data-time="morning" onclick="selectSuppTime('morning', this)">🌅 Morning</button>
+                        <button class="supp-time-btn" data-time="afternoon" onclick="selectSuppTime('afternoon', this)">☀️ Afternoon</button>
+                        <button class="supp-time-btn" data-time="night" onclick="selectSuppTime('night', this)">🌙 Night</button>
+                    </div>
+                </div>
+                
+                <div class="supp-modal-add-buttons">
+                    <button class="supp-add-confirm-btn" onclick="addNewSupplement()">✓ Add Supplement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRM TOAST -->
+    <div class="supp-delete-toast" id="suppDeleteToast">
+        <div class="supp-delete-toast-inner">
+            <span id="suppDeleteMsg">Delete supplement?</span>
+            <div class="supp-toast-btns">
+                <button class="supp-toast-yes" id="suppToastYes">Yes, Delete</button>
+                <button class="supp-toast-no" onclick="cancelSuppDelete()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JOURNAL POPUP MODAL -->
+    <div class="journal-modal-overlay" id="journalModal">
+        <div class="journal-modal">
+            <button class="journal-modal-close" onclick="closeJournalModal()">✕</button>
+            <div class="journal-modal-title" id="jmTitle">Journal Entry</div>
+            <div class="journal-modal-meta">
+                <span id="jmDate">📅 —</span>
+            </div>
+            <div class="journal-modal-body" id="jmBody"></div>
+            <div class="journal-modal-health" id="jmHealth" style="display:none">
+                <div class="journal-modal-health-title">🏥 HEALTH THAT DAY</div>
+                <div class="jm-health-row" id="jmHealthRows"></div>
+            </div>
+        </div>
+    </div>
+    <!-- RESET ALL DATA MODAL -->
+    <div class="reset-modal-overlay" id="resetModal" style="display:none">
+        <div class="reset-modal">
+            <div class="reset-modal-icon">🗑️</div>
+            <div class="reset-modal-title">Delete All Data?</div>
+            <div class="reset-modal-body">This will permanently erase all your tasks, history, assignments, and health data. This <b>cannot be undone.</b></div>
+            <div class="reset-modal-btns">
+                <button class="reset-modal-cancel" onclick="closeResetModal()">Cancel</button>
+                <button class="reset-modal-confirm" onclick="executeResetAll()">Yes, Delete Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP-RIGHT NOTIFICATION TOAST -->
+    <div class="notif-toast" id="notifToast">
+        <div class="notif-toast-icon" id="notifToastIcon">⚠️</div>
+        <div class="notif-toast-content">
+            <div class="notif-toast-title" id="notifToastTitle"></div>
+            <div class="notif-toast-msg" id="notifToastMsg"></div>
+        </div>
+        <button class="notif-toast-close" onclick="closeNotifToast()">✕</button>
+    </div>
+    <!-- ROUTINE MANAGER MODAL -->
+  <div class="supp-modal-overlay" id="routineModal">
+    <div class="supp-modal-large">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+            <span style="font-size: 18px; font-weight: 700; color: var(--text-primary);">✅ Manage Routine</span>
+            <button onclick="closeRoutineManager()" class="supp-header-close-btn">✕</button>
+        </div>
+
+        <!-- Existing Routine Items -->
+        <div id="routineModalContent" style="display:flex; flex-direction:column; gap:16px; padding: 12px 0;"></div>
+
+        <!-- Add New Item -->
+        <div class="supp-modal-add-section">
+            <div class="supp-add-header">➕ Add New Routine Item</div>
+            <div class="supp-add-input-row">
+                <input type="text" id="routineItemInput" class="supp-name-input" placeholder="e.g. Brush teeth..." maxlength="30">
+            </div>
+
+            <!-- Section Selector -->
+            <div class="supp-time-selector">
+                <div class="supp-time-label" style="color:white;">Which section?</div>
+                <div class="supp-time-buttons" style="grid-template-columns: 1fr 1fr;">
+                    <button class="supp-time-btn selected" data-section="0" onclick="selectRoutineSection(0, this)">🌅 Morning</button>
+                    <button class="supp-time-btn" data-section="1" onclick="selectRoutineSection(1, this)">💻 Study</button>
+                    <button class="supp-time-btn" data-section="2" onclick="selectRoutineSection(2, this)">🌞 Afternoon</button>
+                    <button class="supp-time-btn" data-section="3" onclick="selectRoutineSection(3, this)">🌙 Evening</button>
+                </div>
+            </div>
+
+            <div class="supp-modal-add-buttons">
+                <button class="supp-add-confirm-btn" onclick="addRoutineItem()">✓ Add Item</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="notifSettingsModal" style="display: none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99999; align-items:center; justify-content:center;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:16px; padding:28px; width:90%; max-width:400px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <span style="font-size:18px; font-weight:700; color:var(--text-primary);">🔔 Notification Times</span>
+            <button onclick="closeNotifSettings()"  style="background: white;  border: white; color: red; font-size: 20px;cursor: pointer;  width: 32px;  height: 32px;  border-radius: 6px; display: flex; align-items: center; justify-content: center;  padding: 0; transition: all 0.2s;    background: rgba(239, 68, 68, 0.15);">✕</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <span style="color:var(--text-primary);">🌅 Morning</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="time" id="notif_morning_time" style="padding:6px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);">
+                    <input type="checkbox" id="notif_morning_enabled" checked style="width:18px; height:18px; cursor:pointer;">
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <span style="color:var(--text-primary);">☀️ Afternoon</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="time" id="notif_afternoon_time" style="padding:6px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);">
+                    <input type="checkbox" id="notif_afternoon_enabled" checked style="width:18px; height:18px; cursor:pointer;">
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <span style="color:var(--text-primary);">🌙 Evening</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="time" id="notif_evening_time" style="padding:6px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);">
+                    <input type="checkbox" id="notif_evening_enabled" checked style="width:18px; height:18px; cursor:pointer;">
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <span style="color:var(--text-primary);">🔔 Final Check</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="time" id="notif_final_time" style="padding:6px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);">
+                    <input type="checkbox" id="notif_final_enabled" checked style="width:18px; height:18px; cursor:pointer;">
+                </div>
+            </div>
+        </div>
+        <button onclick="saveNotifSettings()" style="width:100%; margin-top:20px; padding:12px; background:var(--accent-primary); border:none; border-radius:8px; color:#000; font-weight:700; font-size:14px; cursor:pointer;">💾 Save Settings</button>
+    </div>
+</div>
+ 
+    <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzAmbek5O3CKprzUyYReqcwCV3ZUYcnno",
+      authDomain: "activity-log-dd60a.firebaseapp.com",
+      projectId: "activity-log-dd60a",
+      storageBucket: "activity-log-dd60a.firebasestorage.app",
+      messagingSenderId: "24479717136",
+      appId: "1:24479717136:web:c10a7f9a773432b1837795"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    // Register Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/firebase-messaging-sw.js")
+        .then(function(reg) {
+          console.log("SW registered:", reg.scope);
+          messaging.getToken({
+            vapidKey: "BFQt2vtj4eac6hXKKKcMMvtpWEoMsTpgpWPUmvVMJnwEJEH--gOEFK5MBWyyWeintqlk3pDee1LkGia9qcXTdWk",
+            serviceWorkerRegistration: reg
+          }).then(function(token) {
+            if (token) {
+              console.log("FCM Token:", token);
+              localStorage.setItem("fcm_token", token);
+            }
+          }).catch(function(err) {
+            console.log("Token error:", err);
+          });
+        })
+        .catch(function(err) {
+          console.log("SW registration failed:", err);
+        });
+
+      // Also register PWA service worker
+      navigator.serviceWorker.register("/sw.js")
+        .then(reg => console.log("PWA SW registered"))
+        .catch(err => console.log("PWA SW failed:", err));
+    }
+  </script>
+<script src="script.js"></script>
+
+</body>
+  
+</html>
