@@ -509,14 +509,14 @@
 
   <script>
     // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzAmbek5O3CKprzUyYReqcwCV3ZUYcnno",
-      authDomain: "activity-log-dd60a.firebaseapp.com",
-      projectId: "activity-log-dd60a",
-      storageBucket: "activity-log-dd60a.firebasestorage.app",
-      messagingSenderId: "24479717136",
-      appId: "1:24479717136:web:c10a7f9a773432b1837795"
-    };
+   const firebaseConfig = {
+  apiKey: "HIDDEN",
+  authDomain: "activity-log-dd60a.firebaseapp.com",
+  projectId: "activity-log-dd60a",
+  storageBucket: "activity-log-dd60a.firebasestorage.app",
+  messagingSenderId: "HIDDEN",
+  appId: "HIDDEN"
+};
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
 
@@ -526,7 +526,7 @@
         .then(function(reg) {
           console.log("SW registered:", reg.scope);
           messaging.getToken({
-            vapidKey: "BFQt2vtj4eac6hXKKKcMMvtpWEoMsTpgpWPUmvVMJnwEJEH--gOEFK5MBWyyWeintqlk3pDee1LkGia9qcXTdWk",
+            vapidKey: "HIDDEN",
             serviceWorkerRegistration: reg
           }).then(function(token) {
             if (token) {
